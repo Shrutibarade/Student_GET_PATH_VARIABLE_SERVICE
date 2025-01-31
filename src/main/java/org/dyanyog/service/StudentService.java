@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.dnyanyog.common.DBUtils;
 
 public class StudentService {
@@ -25,21 +28,20 @@ public class StudentService {
         return "No data found or an error occurred";
     }
 
-    public String getLastName(int roll_number) {
-        String query = "SELECT last_name FROM student WHERE roll_number = ?";
+    public List<String> getLastName() {
+        List<String> names = new ArrayList<>();
+        String query = "SELECT last_name FROM student";
         try (Connection conn = DBUtils.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
 
-            stmt.setInt(1, roll_number);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getString("last_name");
+            while (rs.next()) {
+                names.add(rs.getString("last_name"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return "No data found or an error occurred";
+        return names.isEmpty() ? List.of("No data found or an error occurred") : names;
     }
 
     public String getEmail(int roll_number) {
