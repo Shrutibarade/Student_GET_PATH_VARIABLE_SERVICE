@@ -5,6 +5,8 @@ import org.dyanyog.service.StudentService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
@@ -30,15 +32,15 @@ public class StudentController {
         return studentService.getEmail(roll_number);
     }
 
-    @GetMapping(value = "/student", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public Student getStudent() {
+    @PostMapping(path = "/student", produces = {"application/json","application/xml"}, consumes={"application/json"})
+    public String  saveStudentData(@RequestBody Student student ) {
         Student std = new Student();
         std.setFirstName("Vaibhav");
         std.setLastName("Jodge");
         std.setEmail("aj287");
         std.setMobile("12121212");
         std.setAge(81);
-        return std;
+        return "data saved";
     }
 
     @GetMapping("/mobile/{roll_number}")
